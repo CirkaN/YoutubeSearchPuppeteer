@@ -1,0 +1,23 @@
+{
+  "name": "yt-search-puppeteer",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "devDependencies": {},
+  "scripts": {
+    "build": "rimraf dist/ && babel src/ -d dist",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/test.js"
+  },
+  "author": "Nikola Cirkovic",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-transform-runtime": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/runtime": "^7.15.4",
+    "puppeteer": "^10.4.0",
+    "rimraf": "^3.0.2"
+  }
+}
