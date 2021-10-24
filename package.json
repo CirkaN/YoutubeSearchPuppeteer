@@ -1,7 +1,7 @@
 {
   "name": "yt-search-puppeteer",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "devDependencies": {},
   "scripts": {
     "build": "rimraf dist/ && babel src/ -d dist",
