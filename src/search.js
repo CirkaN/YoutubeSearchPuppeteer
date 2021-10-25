@@ -1,5 +1,3 @@
-import {puppeteerErrors} from "puppeteer";
-
 const puppeteer = require('puppeteer');
 
 
