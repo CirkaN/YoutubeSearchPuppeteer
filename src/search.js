@@ -3,13 +3,11 @@ const puppeteer = require('puppeteer');
 
 export class Search {
 
-    constructor() {
-
-    }
-
-
     async singleSearch(query, timeout, delay) {
-        const browser = await puppeteer.launch();
+
+        const browser = await puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
         const page = await browser.newPage();
         await page.goto('https://youtube.com');
 
@@ -31,7 +29,9 @@ export class Search {
     }
 
     async radio(query, timeout) {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
         const page = await browser.newPage();
         await page.goto(query);
 
