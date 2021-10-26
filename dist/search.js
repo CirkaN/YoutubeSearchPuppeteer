@@ -17,6 +17,8 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var puppeteer = require('puppeteer');
 
+var moment = require('moment');
+
 var Search = /*#__PURE__*/function () {
   function Search() {
     (0, _classCallCheck2["default"])(this, Search);
@@ -32,7 +34,9 @@ var Search = /*#__PURE__*/function () {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return puppeteer.launch();
+                return puppeteer.launch({
+                  args: ['--no-sandbox', '--disable-setuid-sandbox']
+                });
 
               case 2:
                 browser = _context.sent;
@@ -109,65 +113,126 @@ var Search = /*#__PURE__*/function () {
     key: "radio",
     value: function () {
       var _radio = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(query, timeout) {
-        var browser, page, titleSelector, hrefSelector, result;
+        var max_length,
+            browser,
+            page,
+            titleSelector,
+            hrefSelector,
+            videoLengthSelector,
+            videoLength,
+            seconds,
+            n,
+            result,
+            _args2 = arguments;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return puppeteer.launch();
+                max_length = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : 10;
+                _context2.next = 3;
+                return puppeteer.launch({
+                  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+                  headless: false
+                });
 
-              case 2:
+              case 3:
                 browser = _context2.sent;
-                _context2.next = 5;
+                _context2.next = 6;
                 return browser.newPage();
 
-              case 5:
+              case 6:
                 page = _context2.sent;
-                _context2.next = 8;
+                _context2.next = 9;
                 return page["goto"](query);
 
-              case 8:
-                _context2.next = 10;
+              case 9:
+                _context2.next = 11;
                 return page.waitForSelector('a.yt-simple-endpoint > h3 > span#video-title', {
                   timeout: timeout
                 });
 
-              case 10:
+              case 11:
                 titleSelector = _context2.sent;
-                _context2.next = 13;
+                _context2.next = 14;
                 return page.waitForSelector('a.yt-simple-endpoint.style-scope.ytd-compact-video-renderer', {
                   timeout: timeout
                 });
 
-              case 13:
+              case 14:
                 hrefSelector = _context2.sent;
-                _context2.next = 16;
+                _context2.next = 17;
+                return page.waitForSelector('a.yt-simple-endpoint.inline-block.style-scope.ytd-thumbnail > div.style-scope.ytd-thumbnail > ytd-thumbnail-overlay-time-status-renderer > span.style-scope.ytd-thumbnail-overlay-time-status-renderer', {
+                  timeout: timeout
+                });
+
+              case 17:
+                videoLengthSelector = _context2.sent;
+                _context2.next = 20;
+                return videoLengthSelector.evaluate(function (el) {
+                  return el.textContent;
+                });
+
+              case 20:
+                _context2.next = 22;
+                return _context2.sent.trim();
+
+              case 22:
+                videoLength = _context2.sent;
+                seconds = moment.duration(videoLength).asSeconds(); //
+                // const test = await page.$$('ytd-compact-video-renderer',(element=>{console.log(element.textContent)}));
+                // const text = await page.evaluate(() => Array.from(document.querySelectorAll('ytd-compact-video-renderer'), element => {
+                //     console.log(element)
+                // }));
+                // console.log(text[0])
+                // text.forEach(e => {
+                //      console.log('h' + e)
+                // })
+
+                _context2.next = 26;
+                return page.evaluate(function () {
+                  console.log(document.querySelectorAll('ytd-compact-video-renderer'));
+                  /*      let divs = [...document.querySelectorAll('ytd-compact-video-renderer')]
+                        console.log(divs);
+                        return divs.map((div)=>{return div.textContent});*/
+                });
+
+              case 26:
+                n = _context2.sent;
+                console.log(n);
+                _context2.next = 30;
                 return titleSelector.evaluate(function (el) {
                   return el.textContent;
                 });
 
-              case 16:
+              case 30:
                 _context2.t0 = _context2.sent.trim();
-                _context2.next = 19;
+                _context2.next = 33;
                 return hrefSelector.evaluate(function (el) {
                   return el.getAttribute('href');
                 });
 
-              case 19:
+              case 33:
                 _context2.t1 = _context2.sent;
                 _context2.t2 = 'https://youtube.com' + _context2.t1;
+                _context2.next = 37;
+                return videoLengthSelector.evaluate(function (el) {
+                  return el.textContent;
+                });
+
+              case 37:
+                _context2.t3 = _context2.sent.trim();
                 result = {
                   title: _context2.t0,
-                  url: _context2.t2
+                  url: _context2.t2,
+                  length: _context2.t3
                 };
-                _context2.next = 24;
+                _context2.next = 41;
                 return browser.close();
 
-              case 24:
+              case 41:
                 return _context2.abrupt("return", result);
 
-              case 25:
+              case 42:
               case "end":
                 return _context2.stop();
             }
